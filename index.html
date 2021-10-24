@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <style>
+            .lightBody {
+                background-color:#fff;
+                transition:all 300ms ease-in-out;
+            }
+            .darkBody {
+                background-color:#000;
+                transition:all 300ms ease-in-out;
+            }
+            .lightTitle {
+                font-family:Calibri Light, sans-serif;
+                font-size: 38px;
+                text-align:center;
+                color:#000;
+                transition:all 300ms ease-in-out;
+            }
+            .darkTitle {
+                font-family:Calibri Light, sans-serif;
+                font-size: 38px;
+                text-align:center;
+                color:#fff;
+            }
+            .lightHeading_1 {
+                font-family:Calibri Light, sans-serif;
+                font-size: 26px;
+                color: #2F5496;
+            }
+            .lightNormal {
+                font-family:Calibri;
+                font-size: 21px;
+                color:#000;
+                transition:all 300ms ease-in-out;
+            }
+            .darkNormal {
+                font-family:Calibri;
+                font-size: 21px;
+                color:#fff;
+                transition:all 300ms ease-in-out;
+            }
+            .lighHr {
+                height:2px;
+                border-width:0;
+                color:#808080;;
+                background-color:#808080;
+                transition:all 300ms ease-in-out;
+            }
+            .darkHr {
+                height:2px;
+                border-width:0;
+                color: #333;
+                background-color: #333;
+                transition:all 300ms ease-in-out;
+            }
+            li {
+                font-family:Calibri;
+                font-size: 21px;
+                color: #2F5496;
+            }
+            .containter {
+                position:absolute;
+                top:50%;
+                left:50%;
+                transform:translate(-50%, -50%);
+            }
+            .toggle-btn {
+                width:40px;
+                height:20px;
+                background:gray;
+                border-radius:15px;
+                padding:5px;
+                transition:all 300ms ease-in-out;
+
+            }
+            .toggle-btn > .inner-circle {
+                width: 20px;
+                height:20px;
+                background:#fff;
+                border-radius:50%;
+                transition:all 300ms ease-in-out;
+            }
+            .toggle-btn.active {
+                background: #2f5496;;
+
+            }
+            .toggle-btn.active > .inner-circle {
+                margin-left: 20px;
+            }
+        </style>
+        <title>WebSocket Chatbot</title>
+    </head>
+    <p class="lightTitle">Python Chatbot</p>
+    <hr class="lightHr">
+    <br>
+    <p class="lightHeading_1">Please use proper grammar and complete punctuation.</p>
+    <pre class="lightNormal">Please note that the chatbot <em>only</em> knows to respond to certain phrases or words.
+If there is no programmed response, "..." will be displayed.</pre>
+    <div id="chatFormContainer">
+        <form id="chatForm">
+            <input id="chatMessage" placeholder="Type  message" type="text">
+        </form>
+    </div>
+    <body class="lightBody">
+        <script>
+            let darkModeActive = false
+            var ws = new WebSocket("ws://web-assistant-doggo.herokuapp.com/"),
+                messages = document.createElement('ul');
+            ws.onmessage = function (event) {
+                var messages = document.getElementsByTagName('ul')[0],
+                    message = document.createElement('li'),
+                    content = document.createTextNode(event.data);
+                message.appendChild(content);
+                messages.appendChild(message);
+            };
+            document.body.appendChild(messages);
+            chatForm.addEventListener("submit", sendMessage);
+            function sendMessage(e) {
+            e.preventDefault();
+            var message = document.getElementById('chatMessage').value;
+            ws.send(message)
+            document.getElementById('chatMessage').value = ''
+            };
+        </script>
+        <div class="container">
+            <div class="toggle-btn" onclick="this.classList.toggle('active'); 
+            if (darkModeActive == false) {
+                document.querySelector('.lightBody').className='darkBody'
+                document.querySelector('.lightNormal').className='darkNormal'
+                document.querySelector('.lightHr').className='darkHr'
+                document.querySelector('.lightTitle').className='darkTitle'
+                darkModeActive = true
+            } else {
+                document.querySelector('.darkBody').className='lightBody'
+                document.querySelector('.darkNormal').className='lightNormal'
+                document.querySelector('.darkHr').className='lightHr'
+                document.querySelector('.darkTitle').className='lightTitle'
+                darkModeActive = false
+            }">
+                <div class="inner-circle">
+
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
